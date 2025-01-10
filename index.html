@@ -17,12 +17,21 @@
             align-items: center;
             height: 100vh;
             text-align: center;
+            overflow: hidden; /* Prevent scrolling */
         }
 
         h1 {
             color: #6a4c9c;
             font-size: 2.5rem;
-            margin-bottom: 50px;
+            margin-bottom: 20px;
+        }
+
+        /* Flex container for the Teacher and Student buttons */
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .container {
@@ -30,7 +39,7 @@
             color: white;
             width: 200px;
             padding: 15px;
-            margin: 20px;
+            margin: 10px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             cursor: pointer;
@@ -48,7 +57,7 @@
             color: #6a4c9c;
             padding: 15px 30px;
             font-size: 1.2rem;
-            margin: 20px;
+            margin: 20px 0;
             border-radius: 10px;
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -68,10 +77,9 @@
         }
 
         @media (max-width: 768px) {
-
             .container,
             .download-btn {
-                width: 100%;
+                width: 80%;
                 max-width: 300px;
             }
         }
@@ -80,19 +88,23 @@
 
 <body>
     <h1>Welcome To DraftDesk</h1>
-    <a href="teacherSignin.html">
-        <div class="container">
-            Teacher
-        </div>
-    </a>
-    <a href="assignmetlist.html">
-        <div class="container">
-            Student
-        </div>
-    </a>
+
+    <!-- Container for Teacher and Student Buttons -->
+    <div class="buttons-container">
+        <a href="teacherSignin.html">
+            <div class="container">
+                Teacher
+            </div>
+        </a>
+        <a href="assignmetlist.html">
+            <div class="container">
+                Student
+            </div>
+        </a>
+    </div>
+
     <!-- Download Button -->
-    <a href="https://drive.google.com/uc?id=1zlNe7K7M0STkPoyP_BebrfPOxWC1b_QX&export=download" class="download-btn"
-        target="_blank">
+    <a href="https://drive.google.com/uc?id=1zlNe7K7M0STkPoyP_BebrfPOxWC1b_QX&export=download" class="download-btn" target="_blank">
         Download DraftDesk
     </a>
 </body>
