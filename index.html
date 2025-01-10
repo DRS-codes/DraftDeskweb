@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftDesk</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        h1 {
+            color: #6a4c9c;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+        }
+
+        .container {
+            background-color: #6a4c9c;
+            color: white;
+            width: 200px;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            background-color: #5b3b8a;
+        }
+
+        .download-btn {
+            background-color: white;
+            color: #6a4c9c;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            margin: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-5px);
+            background-color: #5b3b8a;
+            color: white;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+
+            .container,
+            .download-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Welcome To DraftDesk</h1>
+    <a href="teacherSignin.html">
+        <div class="container">
+            Teacher
+        </div>
+    </a>
+    <a href="assignmetlist.html">
+        <div class="container">
+            Student
+        </div>
+    </a>
+    <!-- Download Button -->
+    <a href="https://drive.google.com/uc?id=1zlNe7K7M0STkPoyP_BebrfPOxWC1b_QX&export=download" class="download-btn"
+        target="_blank">
+        Download DraftDesk Mobile App
+    </a>
+</body>
+
+</html>

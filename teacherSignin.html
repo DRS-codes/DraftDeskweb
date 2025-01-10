@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Sign-in</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .signin-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+
+        h1 {
+            color: #6a4c9c;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #6a4c9c;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #5b3b8a;
+        }
+
+        .error-message {
+            color: #e94e77;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="signin-container">
+        <h1>Teacher Sign-in</h1>
+        <input type="text" id="code" placeholder="Enter Code">
+        <input type="submit" value="Sign In" onclick="verifyCode()">
+        <div class="error-message" id="error-message"></div>
+    </div>
+
+    <script>
+        function verifyCode() {
+            var code = document.getElementById('code').value;
+            var errorMessage = document.getElementById('error-message');
+            if (code === '00') {
+                window.location.href = 'assignmentScreen.html';
+            } else {
+                errorMessage.textContent = 'Invalid code. Please try again.';
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Data Fetch</title>
+    <!-- Use type="module" to allow imports in the browser -->
+    <script type="module">
+        // Import necessary Firebase SDK functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBoRFAja8GQB7F__Vi3nH_3-uGKkJMEk_E",
+            authDomain: "video-downloader-d4d7b.firebaseapp.com",
+            projectId: "video-downloader-d4d7b",
+            storageBucket: "video-downloader-d4d7b.appspot.com",
+            messagingSenderId: "1088079610595",
+            appId: "1:1088079610595:web:bb8989f4598f03c2837bd6",
+            measurementId: "G-GKFPT3P8TY"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);  // Initialize Firestore
+
+        // Reference to the Firestore collection
+        const assignmentsRef = collection(db, "assignments");
+
+        // Fetch data from Firestore
+        async function fetchData() {
+            try {
+                const querySnapshot = await getDocs(assignmentsRef);
+                if (querySnapshot.empty) {
+                    console.log("No data available");
+                    document.getElementById("data-display").innerHTML = "<p>No data found</p>";
+                } else {
+                    let htmlContent = "<ul>";
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        htmlContent += `<li><strong>Subject:</strong> ${data.Subject} <br><br> <strong>Topic:</strong> ${data.Topic} <br><br> <strong>Due Date:</strong> ${data.date}</li>`;
+                    });
+                    htmlContent += "</ul>";
+                    document.getElementById("data-display").innerHTML = htmlContent;
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                document.getElementById("data-display").innerHTML = "<p>Error fetching data</p>";
+            }
+        }
+
+        // Call the fetchData function to fetch the data when the page loads
+        fetchData();
+    </script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+            color: purple;
+            font-size: 2.5rem;
+            font-weight: 600;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        .data-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .data-item {
+            background-color: purple;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .data-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .data-item h3 {
+            color: #4a90e2;
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        .data-item p {
+            color: #555;
+            font-size: 1rem;
+            margin: 5px 0;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        .data-item .due-date {
+            font-weight: bold;
+            color: #e94e77;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: purple;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        ul li:nth-child(even) {
+            background-color: purple;
+        }
+
+        ul li span {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .data-display {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Assignments</h1>
+        <div id="data-display" class="data-display"></div>
+    </div>
+</body>
+
+</html>

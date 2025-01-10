@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignments Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #4a4a4a;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #6a1b9a;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #6a1b9a;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #6a1b9a;
+        }
+
+        select,
+        input[type="text"],
+        input[type="date"],
+        input[type="time"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #6a1b9a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #9c4dcc;
+        }
+
+        .data-display {
+            margin-top: 30px;
+        }
+
+        .data-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-item h3 {
+            color: #6a1b9a;
+        }
+
+        .actions button {
+            background-color: #6a1b9a;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+
+        .actions button:hover {
+            background-color: #9c4dcc;
+        }
+
+        .actions button:active {
+            background-color: #4a148c;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Assignments Management</h1>
+    <div class="container">
+        <h2>Add Assignment</h2>
+        <div class="form-group">
+            <label for="subject">Subject:</label>
+            <select id="subject">
+                <option value="c">C</option>
+                <option value="cpp">C++</option>
+                <option value="python">Python</option>
+                <option value="java">Java</option>
+                <option value="computer_fundamentals">Computer Fundamentals</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="topic">Topic:</label>
+            <input type="text" id="topic" placeholder="Enter topic">
+        </div>
+        <div class="form-group">
+            <label for="date">Due Date:</label>
+            <input type="date" id="date">
+        </div>
+        <div class="form-group">
+            <label for="time">Time:</label>
+            <input type="time" id="time">
+        </div>
+        <button id="addButton">Add Assignment</button>
+
+        <h2>Assignments List</h2>
+        <div id="data-display" class="data-display"></div>
+    </div>
+
+    <script type="module">
+        // Firebase setup and imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBoRFAja8GQB7F__Vi3nH_3-uGKkJMEk_E",
+            authDomain: "video-downloader-d4d7b.firebaseapp.com",
+            projectId: "video-downloader-d4d7b",
+            storageBucket: "video-downloader-d4d7b.appspot.com",
+            messagingSenderId: "1088079610595",
+            appId: "1:1088079610595:web:bb8989f4598f03c2837bd6",
+            measurementId: "G-GKFPT3P8TY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const assignmentsRef = collection(db, "assignments");
+
+        // Fetch data function
+        async function fetchData() {
+            try {
+                const querySnapshot = await getDocs(assignmentsRef);
+                let htmlContent = "";
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    htmlContent += `
+                        <div class="data-item" id="item-${doc.id}">
+                            <h3>${data.Subject}</h3>
+                            <p><strong>Topic:</strong> ${data.Topic}</p>
+                            <p><strong>Due Date:</strong> ${data.date}</p>
+                            <p><strong>Time:</strong> ${data.time}</p>
+                            <div class="actions">
+                                <button class="update" onclick="updateAssignment('${doc.id}')">Update</button>
+                                <button onclick="deleteAssignment('${doc.id}')">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById("data-display").innerHTML = htmlContent;
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        // Add assignment function
+        async function addAssignment() {
+            const subject = document.getElementById("subject").value;
+            const topic = document.getElementById("topic").value;
+            const date = document.getElementById("date").value;
+            const time = document.getElementById("time").value;
+
+            if (subject && topic && date && time) {
+                try {
+                    await addDoc(assignmentsRef, {
+                        Subject: subject,
+                        Topic: topic,
+                        date: date,
+                        time: time
+                    });
+                    alert("Assignment added successfully!");
+                    fetchData();  // Refresh the list
+                } catch (error) {
+                    console.error("Error adding assignment:", error);
+                }
+            } else {
+                alert("Please fill all fields.");
+            }
+        }
+
+        // Globalizing the functions by attaching them to window object
+        window.updateAssignment = async function (id) {
+            console.log("Updating assignment with ID:", id);  // Debugging log
+
+            const newSubject = prompt("Enter new subject:");
+            const newTopic = prompt("Enter new topic:");
+            const newDate = prompt("Enter new due date:");
+            const newTime = prompt("Enter new time:");
+
+            if (newSubject && newTopic && newDate && newTime) {
+                try {
+                    const itemRef = doc(db, "assignments", id);
+                    await updateDoc(itemRef, {
+                        Subject: newSubject,
+                        Topic: newTopic,
+                        date: newDate,
+                        time: newTime
+                    });
+                    alert("Assignment updated successfully!");
+                    fetchData();  // Refresh the list
+                } catch (error) {
+                    console.error("Error updating assignment:", error);
+                }
+            } else {
+                alert("All fields must be filled.");
+            }
+        };
+
+        window.deleteAssignment = async function (id) {
+            console.log("Deleting assignment with ID:", id);  // Debugging log
+
+            if (confirm("Are you sure you want to delete this assignment?")) {
+                try {
+                    const itemRef = doc(db, "assignments", id);
+                    await deleteDoc(itemRef);
+                    alert("Assignment deleted successfully!");
+                    fetchData();  // Refresh the list
+                } catch (error) {
+                    console.error("Error deleting assignment:", error);
+                }
+            }
+        };
+
+        // Call fetchData on page load
+        fetchData();
+
+        // Bind event listeners
+        document.getElementById("addButton").addEventListener("click", addAssignment);
+    </script>
+</body>
+
+</html>
